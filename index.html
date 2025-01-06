@@ -3,10 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>تسجيل الدخول</title>
+  <title>تسجيل الدخول - SPARKLE Media Agency</title>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
-    /* نفس التنسيقات من الأكواد السابقة */
     :root {
       --primary-color: #1a5f7a;
       --secondary-color: #2c88b0;
@@ -125,34 +124,22 @@
   </div>
 
   <script>
-    async function fetchCredentials() {
-      // جلب كلمات المرور من الفرع الخاص
-      const response = await fetch('credentials.js');
-      if (!response.ok) {
-        throw new Error('Unable to fetch credentials');
-      }
-      return response.text();
-    }
-
-    document.getElementById('loginForm').addEventListener('submit', async function(event) {
+    document.getElementById('loginForm').addEventListener('submit', function(event) {
       event.preventDefault();
 
       const username = document.getElementById('username').value;
       const password = document.getElementById('password').value;
 
-      try {
-        const credentialsScript = await fetchCredentials();
-        eval(credentialsScript); // تحميل بيانات credentials.js
+      // بيانات تسجيل دخول وهمية (يمكن تغييرها لاحقًا لتكون من قاعدة بيانات)
+      const validUsername = "SP";
+      const validPassword = "1234";
 
-        // تحقق من تسجيل الدخول
-        if (username === validUsername && password === validPassword) {
-          window.location.href = "index1.html"; // التوجيه للصفحة الرئيسية
-        } else {
-          document.getElementById('errorMessage').textContent = "اسم المستخدم أو كلمة المرور غير صحيحة.";
-        }
-      } catch (error) {
-        console.error(error);
-        document.getElementById('errorMessage').textContent = "حدث خطأ أثناء التحقق.";
+      if (username === validUsername && password === validPassword) {
+        // إعادة التوجيه إلى صفحة الفواتير
+        window.location.href = "index1.html";
+      } else {
+        // عرض رسالة خطأ
+        document.getElementById('errorMessage').textContent = "اسم المستخدم أو كلمة المرور غير صحيحة.";
       }
     });
   </script>
