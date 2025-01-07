@@ -5,11 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>نظام الفواتير - SPARKLE Media Agency</title>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
-  
-
-  
   <style>
-    /* Base Styles */
     :root {
       --primary-color: #1a5f7a;
       --secondary-color: #2c88b0;
@@ -17,6 +13,9 @@
       --text-color: #2d3748;
       --border-color: #e2e8f0;
       --background-color: #f7fafc;
+      --success-color: #48bb78;
+      --error-color: #f56565;
+      --warning-color: #ed8936;
     }
 
     * {
@@ -29,189 +28,80 @@
       font-family: 'Cairo', sans-serif;
       background-color: var(--background-color);
       color: var(--text-color);
-      line-height: 1.4;
-      font-size: 14px;
+      line-height: 1.6;
     }
 
-    /* Print-specific styles */
-    @page {
-      size: A4;
-      margin: 0;
-    }
-
-    @media print {
-  .btn, .modal, .notification {
-    display: none !important; /* إخفاء العناصر غير المهمة للطباعة */
-  }
-
-  .invoice-display {
-    box-shadow: none;
-  }
-
-  body {
-    background: white;
-  }
-
-  .container {
-    margin: 0;
-    padding: 0;
-  }
-
-  .header {
-    display: none !important;
-  }
-  .invoice-content {
-    margin-bottom: 80mm; /* مساحة كافية لتجنب التداخل مع الذيل */
-  }
-}
-
-
-      .invoice-header {
-    background: white;
-    padding: 10mm 15mm;
-    border-bottom: 1px solid var(--border-color);
-    }
-
-    .invoice-footer {
-      background: white;
-      padding: 10mm 15mm;
-      border-top: 1px solid var(--border-color);
-    }
-    
-
-
-
-      /* Main content padding to avoid overlap with header/footer */
-      .invoice-content {
-        margin-top: 40mm;
-        margin-bottom: 60mm;
-      }
-
-      /* Ensure page breaks don't occur inside elements */
-      tr, .totals p {
-        page-break-inside: avoid;
-      }
-
-      /* Force page breaks before certain elements */
-      .page-break {
-        page-break-before: always;
-      }
-    
-
-    /* Compact Layout Styles */
     .container {
-      max-width: 210mm;
-      margin: 1rem auto;
+      max-width: 1200px;
+      margin: 2rem auto;
       padding: 0 1rem;
     }
 
-    .invoice-display {
-      background: white;
-      padding: 1.5rem;
-      border-radius: 0.5rem;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-
-    .invoice-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 1rem;
-      padding-bottom: 0.5rem;
-      border-bottom: 1px solid var(--border-color);
-    }
-
-    .company-logo {
-      width: 120px;
-      height: auto;
-    }
-
-    .invoice-meta {
-      margin-bottom: 1rem;
-      font-size: 0.9rem;
-    }
-
-    .items-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin: 0.5rem 0;
-      font-size: 0.9rem;
-    }
-
-    .items-table th,
-    .items-table td {
-      padding: 0.5rem;
-      border: 1px solid var(--border-color);
+    .header {
       text-align: center;
+      margin-bottom: 2rem;
+      padding: 2rem;
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      border-radius: 1rem;
+      color: white;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      position: relative;
+      overflow: hidden;
     }
 
-    .items-table th {
+    .header::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
+      animation: rotate 20s linear infinite;
+    }
+
+    @keyframes rotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .btn {
       background-color: var(--primary-color);
       color: white;
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 0.5rem;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: 'Cairo', sans-serif;
+      position: relative;
+      overflow: hidden;
     }
 
-    .totals {
-      margin-top: 1rem;
-      padding: 0.5rem;
-      background-color: var(--background-color);
-      border-radius: 0.25rem;
+    .btn::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      background: rgba(255,255,255,0.2);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      transition: width 0.6s ease, height 0.6s ease;
     }
 
-    .totals p {
-      display: flex;
-      justify-content: space-between;
-      margin: 0.25rem 0;
-      font-size: 0.9rem;
+    .btn:hover::after {
+      width: 300%;
+      height: 300%;
     }
 
-    .total-amount {
-      font-size: 1.1rem;
-      color: var(--primary-color);
-      background-color: rgba(26, 95, 122, 0.1);
-      padding: 0.5rem;
-      margin-top: 0.5rem;
-      border-radius: 0.25rem;
+    .btn:hover {
+      background-color: var(--secondary-color);
+      transform: translateY(-2px);
     }
 
-    .notes-section {
-      margin: 1rem 0;
-      padding: 0.5rem;
-      font-size: 0.9rem;
-      border-right: 2px solid var(--primary-color);
-    }
-
-    .thank-you-message {
-      text-align: center;
-      margin: 1rem 0;
-      font-size: 0.9rem;
-    }
-
-    .invoice-footer {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
-      margin-top: 1rem;
-      padding-top: 0.5rem;
-      border-top: 1px solid var(--border-color);
-      font-size: 0.8rem;
-    }
-
-    .company-details {
-      flex: 1;
-    }
-
-    .signature-container {
-      text-align: center;
-      margin-right: 1rem;
-    }
-
-    .signature-image {
-      width: 100px;
-      height: auto;
-      margin-top: 0.25rem;
-    }
-
-    /* Form Styles */
     .modal {
       display: none;
       position: fixed;
@@ -220,40 +110,492 @@
       width: 100%;
       height: 100%;
       background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(5px);
       z-index: 1000;
     }
 
     .modal-content {
       background: white;
       width: 90%;
-      max-width: 800px;
+      max-width: 900px;
       margin: 2rem auto;
-      padding: 1.5rem;
-      border-radius: 0.5rem;
+      padding: 2rem;
+      border-radius: 1rem;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
       max-height: 90vh;
       overflow-y: auto;
+      animation: modalSlideIn 0.3s ease-out;
+    }
+
+    @keyframes modalSlideIn {
+      from {
+        transform: translateY(-20px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
     }
 
     .form-group {
-      margin-bottom: 1rem;
+      margin-bottom: 1.5rem;
+      position: relative;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      color: var(--primary-color);
+      transition: color 0.3s ease;
     }
 
     .form-control {
       width: 100%;
-      padding: 0.5rem;
-      border: 1px solid var(--border-color);
-      border-radius: 0.25rem;
-      font-size: 0.9rem;
+      padding: 0.75rem;
+      border: 2px solid var(--border-color);
+      border-radius: 0.5rem;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      font-family: 'Cairo', sans-serif;
     }
 
-    .btn {
+    .form-control:focus {
+      outline: none;
+      border-color: var(--secondary-color);
+      box-shadow: 0 0 0 3px rgba(44, 136, 176, 0.2);
+    }
+
+    .form-group:hover label {
+      color: var(--secondary-color);
+    }
+
+    .currency-select {
+      width: 100%;
+      padding: 0.75rem;
+      border: 2px solid var(--border-color);
+      border-radius: 0.5rem;
+      font-size: 1rem;
+      font-family: 'Cairo', sans-serif;
+      background-image: linear-gradient(45deg, transparent 50%, var(--primary-color) 50%),
+                        linear-gradient(135deg, var(--primary-color) 50%, transparent 50%);
+      background-position: calc(100% - 20px) calc(1em + 2px),
+                         calc(100% - 15px) calc(1em + 2px);
+      background-size: 5px 5px,
+                      5px 5px;
+      background-repeat: no-repeat;
+      appearance: none;
+    }
+
+    .invoice-display {
+      background: white;
+      padding: 2rem;
+      border-radius: 1rem;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      margin-top: 2rem;
+      position: relative;
+      animation: fadeIn 0.5s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .invoice-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+      border-bottom: 2px solid var(--border-color);
+      position: relative;
+    }
+
+    .invoice-header::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.5s ease;
+    }
+
+    .invoice-display:hover .invoice-header::after {
+      transform: scaleX(1);
+    }
+
+    .company-logo {
+      width: 150px;
+      height: auto;
+      object-fit: contain;
+      border-radius: 0.5rem;
+      
+      transition: transform 0.3s ease;
+    }
+
+    .company-logo:hover {
+      transform: scale(1.05);
+    }
+
+    .invoice-title {
+      font-size: 2rem;
+      color: var(--primary-color);
+      margin-bottom: 0.5rem;
+      position: relative;
+      display: inline-block;
+    }
+
+    .invoice-title::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: var(--accent-color);
+      transform: scaleX(0);
+      transform-origin: right;
+      transition: transform 0.3s ease;
+    }
+
+    .invoice-title:hover::after {
+      transform: scaleX(1);
+      transform-origin: left;
+    }
+
+    .items-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      margin: 1rem 0;
+      background: white;
+      border-radius: 0.5rem;
+      overflow: hidden;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .items-table th,
+    .items-table td {
+      padding: 1rem;
+      text-align: center;
+      border: 1px solid var(--border-color);
+      transition: background-color 0.3s ease;
+    }
+
+    .items-table th {
       background-color: var(--primary-color);
       color: white;
-      padding: 0.5rem 1rem;
-      border: none;
+      font-weight: 600;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .items-table th::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      animation: shine 3s infinite;
+    }
+
+    @keyframes shine {
+      to {
+        left: 100%;
+      }
+    }
+
+    .items-table tbody tr:hover td {
+      background-color: rgba(44, 136, 176, 0.05);
+    }
+
+    .totals {
+      margin-top: 2rem;
+      padding: 1.5rem;
+      background-color: var(--background-color);
+      border-radius: 0.5rem;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+      transition: transform 0.3s ease;
+    }
+
+    .totals:hover {
+      transform: translateY(-2px);
+    }
+
+    .totals p {
+      display: flex;
+      justify-content: space-between;
+      margin: 0.5rem 0;
+      font-size: 1.1rem;
+      padding: 0.5rem;
       border-radius: 0.25rem;
-      cursor: pointer;
-      font-size: 0.9rem;
+      transition: background-color 0.3s ease;
+    }
+
+    .totals p:hover {
+      background-color: rgba(44, 136, 176, 0.05);
+    }
+
+    .total-amount {
+      font-size: 1.5rem; /* حجم النص */
+      color: var(--primary-color); /* اللون الأساسي */
+      background-color: rgba(26, 95, 122, 0.1); /* خلفية بلون شفاف من اللون الأساسي */
+      padding: 1rem; /* حواف داخلية */
+      text-align: center; /* توسيط النص */
+      border: 2px solid var(--primary-color); /* إطار بلون الثيم */
+      border-radius: 0.5rem; /* زوايا منحنية */
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* ظل خفيف */
+      transition: transform 0.3s ease, background-color 0.3s ease; /* تأثيرات الحركة */
+    }
+
+    .total-amount:hover {
+      background-color: rgba(44, 136, 176, 0.15); /* لون خلفية أفتح عند التحويم */
+      transform: scale(1.05); /* تكبير بسيط عند التحويم */
+      box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2); /* زيادة الظل عند التحويم */
+    }
+
+
+
+    .total-amount::before {
+      content: '';
+      position: absolute;
+      top: -2px;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .total-amount:hover::before {
+      opacity: 1;
+    }
+
+    .notes-section {
+      margin: 1.5rem 0;
+      padding: 1.5rem;
+      background-color: var(--background-color);
+      border-radius: 0.5rem;
+      border-right: 4px solid var(--primary-color);
+      transition: all 0.3s ease;
+    }
+
+    .notes-section:hover {
+      border-right-color: var(--secondary-color);
+      transform: translateX(-2px);
+    }
+
+    .thank-you-message {
+      text-align: center;
+      margin: 1.5rem 0;
+      padding: 1.5rem;
+      color: var(--primary-color);
+      font-size: 1.2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .thank-you-message::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(45deg, transparent 48%, var(--accent-color) 49%, var(--accent-color) 51%, transparent 52%);
+      opacity: 0.1;
+      transform: scale(2);
+      transition: transform 0.5s ease;
+    }
+
+    .thank-you-message:hover::before {
+      transform: scale(2.2);
+    }
+
+    .invoice-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-top: 2rem;
+      padding-top: 2rem;
+      border-top: 2px solid var(--border-color);
+      position: relative;
+    }
+
+    .invoice-footer::before {
+      content: '';
+      position: absolute;
+      top: -2px;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+      transform: scaleX(0);
+      transition: transform 0.5s ease;
+    }
+
+    .invoice-footer:hover::before {
+      transform: scaleX(1);
+    }
+
+    .company-details {
+      text-align: right;
+      transition: transform 0.3s ease;
+    }
+
+    .company-details:hover {
+      transform: translateY(-2px);
+    }
+
+    .signature-container {
+      text-align: center;
+      margin-right: 2rem;
+      transition: transform 0.3s ease;
+    }
+
+    .signature-container:hover {
+      transform: translateY(-2px);
+    }
+
+    .signature-name {
+      margin-bottom: 0.5rem;
+      position: relative;
+    }
+
+    .signature-name::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: var(--accent-color);
+      transform: scaleX(0);
+      transition: transform 0.3s ease;
+    }
+
+    .signature-container:hover .signature-name::after {
+      transform: scaleX(1);
+    }
+
+    .signature-image {
+      width: 150px;
+      height: auto;
+      margin-top: 0.5rem;
+      border-radius: 0.25rem;
+      transition: filter 0.3s ease;
+    }
+
+    .signature-image:hover {
+      filter: contrast(1.1);
+    }
+
+    .notification {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      padding: 1rem 2rem;
+      border-radius: 0.5rem;
+      color: white;
+      font-weight: 600;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.3s ease;
+      z-index: 1000;
+    }
+
+    .notification.success {
+      background-color: var(--success-color);
+    }
+
+    .notification.error {
+      background-color: var(--error-color);
+    }
+
+    .notification.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media print {
+      .btn, .modal {
+        display: none !important;
+      }
+
+      .invoice-display {
+        box-shadow: none;
+      }
+
+      body {
+        background: white;
+      }
+
+      .container {
+        margin: 0;
+        padding: 0;
+      }
+
+      .header {
+        display: none !important; /* إخفاء العنصر "نظام الفواتير" */
+      }
+    
+
+
+      .header::before,
+      .invoice-header::after,
+      .invoice-title::after,
+      .items-table th::after,
+      .total-amount::before,
+      .invoice-footer::before,
+      .signature-name::after {
+        display: none;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .invoice-header {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+
+      .invoice-footer {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+
+      .company-details {
+        margin-bottom: 2rem;
+        text-align: center;
+      }
+
+      .signature-container {
+        margin-right: 0;
+      }
+
+      .modal-content {
+        width: 95%;
+        padding: 1rem;
+      }
+
+      .items-table {
+        font-size: 0.9rem;
+      }
+
+      .items-table th,
+      .items-table td {
+        padding: 0.5rem;
+      }
     }
   </style>
 </head>
@@ -266,7 +608,6 @@
     
     <button class="btn" onclick="openModal()">إنشاء فاتورة جديدة</button>
     <div id="invoiceResult"></div>
-
   </div>
 
   <div class="modal" id="modal">
@@ -346,10 +687,7 @@
   <div id="notification" class="notification"></div>
 
   <script>
-    
-
-      
-      function showNotification(message, type = 'success') {
+    function showNotification(message, type = 'success') {
       const notification = document.getElementById('notification');
       notification.textContent = message;
       notification.className = `notification ${type} show`;
@@ -357,37 +695,37 @@
       setTimeout(() => {
         notification.className = 'notification';
       }, 3000);
-      }
+    }
 
-      function openModal() {
-        document.getElementById('modal').style.display = 'flex';
-        document.getElementById('invoiceForm').reset();
-      }
+    function openModal() {
+      document.getElementById('modal').style.display = 'flex';
+      document.getElementById('invoiceForm').reset();
+    }
 
-      function closeModal() {
-        document.getElementById('modal').style.display = 'none';
-      }
+    function closeModal() {
+      document.getElementById('modal').style.display = 'none';
+    }
 
-      function addRow() {
-        const tbody = document.querySelector('#itemsTable tbody');
-        const newRow = document.createElement('tr');
-        newRow.innerHTML = `
-          <td><input type="text" class="form-control" name="itemDescription[]" required></td>
-          <td><input type="number" class="form-control" name="itemQuantity[]" min="1" required></td>
-          <td><input type="number" class="form-control" name="itemPrice[]" min="0" step="0.01" required></td>
-          <td><button type="button" class="btn" onclick="removeRow(this)">حذف</button></td>
-        `;
-        tbody.appendChild(newRow);
-        
-        // Add animation
-        newRow.style.opacity = '0';
-        newRow.style.transform = 'translateY(-10px)';
-        requestAnimationFrame(() => {
-          newRow.style.transition = 'all 0.3s ease';
-          newRow.style.opacity = '1';
-          newRow.style.transform = 'translateY(0)';
-        });
-      }
+    function addRow() {
+      const tbody = document.querySelector('#itemsTable tbody');
+      const newRow = document.createElement('tr');
+      newRow.innerHTML = `
+        <td><input type="text" class="form-control" name="itemDescription[]" required></td>
+        <td><input type="number" class="form-control" name="itemQuantity[]" min="1" required></td>
+        <td><input type="number" class="form-control" name="itemPrice[]" min="0" step="0.01" required></td>
+        <td><button type="button" class="btn" onclick="removeRow(this)">حذف</button></td>
+      `;
+      tbody.appendChild(newRow);
+      
+      // Add animation
+      newRow.style.opacity = '0';
+      newRow.style.transform = 'translateY(-10px)';
+      requestAnimationFrame(() => {
+        newRow.style.transition = 'all 0.3s ease';
+        newRow.style.opacity = '1';
+        newRow.style.transform = 'translateY(0)';
+      });
+    }
 
     function removeRow(button) {
       const tbody = document.querySelector('#itemsTable tbody');
@@ -451,7 +789,7 @@
               <p>رقم الفاتورة: ${invoiceNumber}</p>
               <p>التاريخ: ${new Date(formData.get('invoiceDate')).toLocaleDateString('en-US')}</p>
             </div>
-            <img src="logo.png" alt="SPARKLE Media Agency Logo" class="company-logo" style="width: 80px; height: auto; margin-left: 10px;">
+            <img src="logo.png" alt="SPARKLE Media Agency Logo" class="company-logo" style="width: 150px; height: auto; margin-left: 40px;">
           </div>
 
           <div class="invoice-meta">
