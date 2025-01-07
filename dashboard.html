@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>لوحة التحكم - SPARKLE Media Agency</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    :root {
+      --primary-color: #1a5f7a;
+      --secondary-color: #2c88b0;
+      --accent-color: #ffd700;
+      --text-color: #2d3748;
+      --background-color: #f7fafc;
+      --card-background: white;
+      --transition: all 0.3s ease;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Cairo', sans-serif;
+      background-color: var(--background-color);
+      color: var(--text-color);
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+      line-height: 1.6;
+    }
+
+    .sidebar {
+      width: 280px;
+      background: linear-gradient(165deg, var(--primary-color), var(--secondary-color));
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem 1rem;
+      box-shadow: 4px 0 20px rgba(0, 0, 0, 0.15);
+      position: relative;
+      overflow-y: auto;
+    }
+
+    .sidebar::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><path fill="%23ffffff10" d="M0 0h200v200H0z"/></svg>') repeat;
+      opacity: 0.1;
+    }
+
+    .sidebar h1 {
+      font-size: 2.2rem;
+      font-weight: bold;
+      margin-bottom: 2.5rem;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+      position: relative;
+    }
+
+    .sidebar h1::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 50px;
+      height: 3px;
+      background-color: var(--accent-color);
+      border-radius: 2px;
+    }
+
+    .nav-button {
+      width: 100%;
+      padding: 1.2rem;
+      margin: 0.5rem 0;
+      border: none;
+      border-radius: 0.8rem;
+      background-color: rgba(255, 255, 255, 0.08);
+      color: white;
+      font-size: 1.1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .nav-button::before {
+      content: '';
+      position: absolute;
+      right: -100%;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+      transition: 0.5s;
+    }
+
+    .nav-button:hover::before {
+      right: 100%;
+    }
+
+    .nav-button:hover {
+      background-color: rgba(255, 255, 255, 0.15);
+      transform: translateX(-8px);
+      box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .nav-button i {
+      font-size: 1.3rem;
+      width: 24px;
+      text-align: center;
+    }
+
+    .content {
+      flex-grow: 1;
+      padding: 2.5rem;
+      overflow-y: auto;
+      background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+    }
+
+    .content h2 {
+      text-align: center;
+      margin-bottom: 2.5rem;
+      font-size: 2rem;
+      color: var(--primary-color);
+      position: relative;
+      padding-bottom: 15px;
+    }
+
+    .content h2::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100px;
+      height: 3px;
+      background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+      border-radius: 2px;
+    }
+
+    .stats-section {
+      margin-bottom: 2.5rem;
+      padding: 1.5rem;
+      background: var(--card-background);
+      border-radius: 1rem;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.05);
+      transition: var(--transition);
+    }
+
+    .stats-section:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
+    }
+
+    .section-title {
+      font-size: 1.5rem;
+      color: var(--primary-color);
+      margin-bottom: 1.5rem;
+      text-align: center;
+      position: relative;
+      padding-bottom: 10px;
+    }
+
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 2px;
+      background: var(--accent-color);
+    }
+
+    .stats-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .stat-card {
+      background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+      padding: 2rem;
+      border-radius: 1rem;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+      text-align: center;
+      transition: var(--transition);
+      border: 1px solid rgba(0, 0, 0, 0.05);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: linear-gradient(to bottom, var(--primary-color), var(--secondary-color));
+      opacity: 0;
+      transition: var(--transition);
+    }
+
+    .stat-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    }
+
+    .stat-card:hover::before {
+      opacity: 1;
+    }
+
+    .stat-title {
+      font-size: 1.2rem;
+      color: var(--primary-color);
+      margin-bottom: 1rem;
+      font-weight: 600;
+    }
+
+    .stat-value {
+      font-size: 2.2rem;
+      font-weight: bold;
+      color: var(--secondary-color);
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+    }
+    .charts-container {
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+}
+
+.chart {
+  text-align: center;
+  background: var(--card-background);
+  padding: 1rem;
+  border-radius: 1rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  width: 300px;
+}
+
+.chart h4 {
+  margin-bottom: 1rem;
+  color: var(--primary-color);
+  font-size: 1.2rem;
+}
+.stat-card {
+  display: block; /* تأكد من أن العنصر يظهر */
+  visibility: visible; /* تأكد من عدم وجود إعداد يخفيه */
+}
+.stat-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+.stat-title {
+  color: var(--primary-color);
+  font-weight: bold;
+}
+
+.stat-value {
+  color: var(--secondary-color);
+}
+.date-time {
+  position: fixed;
+  top: 10px;
+  left: 10px; /* تم التبديل من right إلى left */
+  background: var(--primary-color);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-family: 'Cairo', sans-serif;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+}
+.sidebar {
+  font-family: 'Cairo', sans-serif;
+}
+.logo {
+  width: 120px;
+  height: auto;
+  margin-bottom: 1.5rem;
+}
+.refresh-button {
+  width: 100%;
+  padding: 0.8rem;
+  margin: 1rem 0;
+  border: none;
+  border-radius: 0.8rem;
+  background-color: var(--accent-color);
+  color: var(--primary-color);
+  font-size: 1rem;
+  font-family: 'Cairo', sans-serif;
+  cursor: pointer;
+  font-weight: bold;
+  transition: var(--transition);
+}
+
+.refresh-button:hover {
+  background-color: var(--secondary-color);
+  color: white;
+  transform: scale(1.05);
+}
+
+
+
+    @media (max-width: 768px) {
+      .sidebar {
+        width: 80px;
+        padding: 1rem 0.5rem;
+      }
+
+      .sidebar h1 {
+        font-size: 1.5rem;
+        margin-bottom: 2rem;
+      }
+
+      .nav-button span {
+        display: none;
+      }
+
+      .nav-button {
+        padding: 1rem;
+        justify-content: center;
+      }
+
+      .content {
+        padding: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+    <div id="date-time" class="date-time"></div>
+  <div class="sidebar">
+    <img src="logo.png" alt="Logo" class="logo">
+    
+    <h1>SPARKLE</h1>
+    <button class="refresh-button" onclick="refreshPage()">تحديث البيانات</button>
+    <button class="nav-button" onclick="navigateTo('employees.html')"><i class="fas fa-users"></i><span>الموظفين</span></button>
+    <button class="nav-button" onclick="navigateTo('salaries.html')"><i class="fas fa-money-bill-wave"></i><span>رواتب الموظفين</span></button>
+    <button class="nav-button" onclick="navigateTo('projects.html')"><i class="fas fa-project-diagram"></i><span>المشاريع</span></button>
+    <button class="nav-button" onclick="navigateTo('clients.html')"><i class="fas fa-user-tie"></i><span>العملاء</span></button>
+    <button class="nav-button" onclick="navigateTo('finance.html')"><i class="fas fa-chart-line"></i><span>المالية</span></button>
+    <button class="nav-button" onclick="navigateTo('home.html')"><i class="fas fa-file-invoice"></i><span>إنشاء فاتورة</span></button>
+  </div>
+  <div class="content">
+    <h2>إحصائيات الشركة</h2>
+    <section class="stats-section">
+        <h3 class="section-title">رسوم بيانية</h3>
+        <div class="charts-container">
+          <div class="chart">
+            <h4>إحصائية دول العملاء</h4>
+            <iframe width="235" height="143" seamless frameborder="0" scrolling="no" 
+                    src="https://docs.google.com/spreadsheets/d/e/2PACX-1vT6tzpBeOvv-ff6YNMuhXwTuYO86lk_-0nEUAq8RhS_-T9sYAhipbP3dTyYRPxlcAk-lct_nounp3zX/pubchart?oid=925901259&amp;format=interactive">
+            </iframe>
+          </div>
+          <div class="chart">
+            <h4>إحصائية منصات العملاء</h4>
+            <iframe width="247" height="151" seamless frameborder="0" scrolling="no" 
+                    src="https://docs.google.com/spreadsheets/d/e/2PACX-1vT6tzpBeOvv-ff6YNMuhXwTuYO86lk_-0nEUAq8RhS_-T9sYAhipbP3dTyYRPxlcAk-lct_nounp3zX/pubchart?oid=1430319906&amp;format=interactive">
+            </iframe>
+          </div>
+        </div>
+      </section>
+      
+    
+    <section class="stats-section">
+      <h3 class="section-title">الطلبات</h3>
+      <div class="stats-container" id="ordersContainer"></div>
+    </section>
+  
+    <section class="stats-section">
+      <h3 class="section-title">الموظفين والزبائن</h3>
+      <div class="stats-container" id="employeesClientsContainer"></div>
+    </section>
+  
+    <section class="stats-section">
+      <h3 class="section-title">الإيرادات والتكاليف</h3>
+      <div class="stats-container" id="financeContainer"></div>
+    </section>
+  
+    <section class="stats-section">
+      <h3 class="section-title">سعر الصرف</h3>
+      <div class="stats-container" id="exchangeRateContainer"></div>
+    </section>
+  </div>
+
+  <script>
+    async function fetchStats() {
+      const API_URL = 'https://script.google.com/macros/s/AKfycby_CYwbilkU2Zel83mhTV0ZWxhGss4eY22dar2HhuifaZz9FfhwfmKvZdyL1Cl7kwjbIg/exec';
+      try {
+        const response = await fetch(API_URL);
+        if (!response.ok) throw new Error('Failed to fetch data');
+        return await response.json();
+      } catch (error) {
+        console.error('Error fetching stats:', error);
+        return [];
+      }
+    }
+    function navigateTo(page) {
+        window.location.href = page;
+    }
+
+    function refreshPage() {
+        window.location.reload();
+    }
+
+  
+    function updateDateTime() {
+      const dateTimeElement = document.getElementById('date-time');
+      const now = new Date();
+  
+      // تنسيق الوقت والتاريخ
+      const days = ['الأحد', 'الإثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'];
+      const day = days[now.getDay()];
+      const date = now.toLocaleDateString('ar-EG');
+      const time = now.toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+  
+      // تحديث النص
+      dateTimeElement.textContent = `${day} - ${date} - ${time}`;
+    }
+  
+    // تحديث كل ثانية
+    setInterval(updateDateTime, 1000);
+    updateDateTime();
+  
+    async function renderStats() {
+      // الحاويات
+      const ordersContainer = document.getElementById('ordersContainer');
+      const employeesClientsContainer = document.getElementById('employeesClientsContainer');
+      const financeContainer = document.getElementById('financeContainer');
+      const exchangeRateContainer = document.getElementById('exchangeRateContainer');
+  
+      // تنظيف الحاويات
+      ordersContainer.innerHTML = '';
+      employeesClientsContainer.innerHTML = '';
+      financeContainer.innerHTML = '';
+      exchangeRateContainer.innerHTML = '';
+  
+      // جلب البيانات
+      const stats = await fetchStats();
+  
+      stats.forEach((stat) => {
+        let formattedValue = stat.value;
+  
+        // إضافة علامة $ للقيم المطلوبة
+        if (
+          stat.statistic.includes('الإيرادات') ||
+          stat.statistic.includes('التكلفة') ||
+          stat.statistic.includes('محفظة الشركة')
+        ) {
+          formattedValue = `$${stat.value}`;
+        }
+  
+        // تخصيص الألوان حسب نوع الإحصائية
+        let cardColor = '';
+        if (stat.statistic.includes('الطلبات المكتملة')) {
+          cardColor = 'background: #d4edda; color: #155724;'; // أخضر
+        } else if (stat.statistic.includes('الطلبات الجارية')) {
+          cardColor = 'background: #fff3cd; color: #856404;'; // أصفر
+        } else if (stat.statistic.includes('الطلبات المتبقية')) {
+          cardColor = 'background: #f8d7da; color: #721c24;'; // أحمر
+        }
+  
+        // إنشاء البطاقة
+        const statCard = `
+          <div class="stat-card" style="${cardColor}">
+            <div class="stat-title">${stat.statistic}</div>
+            <div class="stat-value">${formattedValue}</div>
+          </div>
+        `;
+  
+        // توزيع البيانات حسب النوع
+        if (stat.statistic.includes('الطلبات')) {
+          ordersContainer.innerHTML += statCard;
+        } else if (stat.statistic.includes('الموظفين') || stat.statistic.includes('الزبائن')) {
+          employeesClientsContainer.innerHTML += statCard;
+        } else if (
+          stat.statistic.includes('الإيرادات') ||
+          stat.statistic.includes('التكلفة') ||
+          stat.statistic.includes('محفظة الشركة')
+        ) {
+          financeContainer.innerHTML += statCard;
+        } else if (stat.statistic.includes('سعر (دولار - شيكل)')) {
+          exchangeRateContainer.innerHTML += statCard;
+        }
+      });
+    }
+  
+    // استدعاء دالة العرض
+    renderStats();
+  </script>
+  
+  
+</body>
+</html>
